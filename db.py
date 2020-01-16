@@ -16,7 +16,6 @@ def insert_into_db(id, user):
         cursor = conn.cursor()
         query = "INSERT INTO IDENTIFICATION (Id, User) VALUES('" + str(id) + "', '" + str(user) + "')"
         cursor.execute(query)
-        print(query)
         conn.commit()
     except sqlite3.Error as error:
         print(error)
@@ -28,17 +27,15 @@ def insert_into_db(id, user):
 
 def get_all_from_db():
     conn = None
-    values = {}
+    values = []
     try:
         conn = sqlite3.connect('database.db')
         cursor = conn.cursor()
         query = "SELECT * FROM IDENTIFICATION;"
         cursor.execute(query)
         rows = cursor.fetchall()
-        i = 0
         for row in rows:
-            values[i] = row
-            i += 1
+            values.append(row)
         return values
     except sqlite3.Error as error:
         print(error)
@@ -50,3 +47,4 @@ def get_all_from_db():
 
 if __name__ == '__main__':
     create_table()
+

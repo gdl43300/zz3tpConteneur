@@ -1,0 +1,83 @@
+<html>
+<head>
+    <style>
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #dddddd;
+        }
+    </style>
+</head>
+<body>
+
+<h2>User Table</h2>
+
+<table id="myTable">
+    <tr>
+        <th>Id</th>
+        <th>Username</th>
+    </tr>
+</table>
+<input type="text" id="id" name="name" required="required" placeholder="id"
+       minlength="4" maxlength="28" size="38">
+<input type="text" id="user" name="name" required="required" placeholder="username"
+       minlength="4" maxlength="28" size="100">
+<button type="button" onclick="myFunction()">Add</button>
+<script>
+
+    function myFunction() {
+        const id = document.getElementById("id").value;
+        const user = document.getElementById("user").value;
+        if (!isNaN(parseInt(id, 10))) {
+            const xhr = new XMLHttpRequest();
+            const data = id + "," + user;
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    alert("user ajouté");
+                    location.reload();
+                }
+            };
+            xhr.open('POST', 'http://localhost:5000/', true);
+            xhr.send(data);
+        } else {
+            alert("Veuillez renseigner les bons champs");
+            location.reload();
+        }
+
+    }
+
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            const data = JSON.parse(xhr.responseText);
+            let users = data['users'];
+            for (const val in users) {
+                const table = document.getElementById("myTable");
+                const row = table.insertRow(-1);
+                const cell1 = row.insertCell(0);
+                const cell2 = row.insertCell(1);
+                cell1.innerHTML = users[val][0];
+                cell2.innerHTML = users[val][1];
+            }
+
+        }
+
+    };
+
+    xhr.open('GET', 'http://localhost:5000/users', true);
+    xhr.send(null);
+
+</script>
+</body>
+</html>
+

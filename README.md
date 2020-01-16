@@ -1,3 +1,5 @@
 # zz3tpConteneur
 
-pour l'instant juste un Hello world
+la base de donnée, l'api, l'ui
+
+python3 db.py pour creer la table user
