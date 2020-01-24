@@ -47,7 +47,7 @@
                     location.reload();
                 }
             };
-            xhr.open('POST', 'http://localhost:5000/', true);
+            xhr.open('POST', '/', true);
             xhr.send(data);
         } else {
             alert("Veuillez renseigner les bons champs");
@@ -74,7 +74,7 @@
 
     };
 
-    xhr.open('GET', 'http://localhost:5000/users', true);
+    xhr.open('GET', '/users', true);
     xhr.send(null);
 
 </script>

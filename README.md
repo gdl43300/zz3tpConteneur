@@ -1,5 +1,11 @@
 # zz3tpConteneur
 
-la base de donnée, l'api, l'ui
+tp de Guillaume DANIEL, Yves POUEDOGO, Rémi GILBERT
 
-python3 db.py pour creer la table user
+# Lancer l'image
+
+Pour lancer l'image, il faut lui donner un volume pour le dossier `/usr/db` :
+
+```shell script
+docker run -v dbpython:/usr/db tpconteneur:1.2
+```
