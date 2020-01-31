@@ -1,19 +1,26 @@
-import sqlite3
-import os
+import mysql
 
-pathToDb = "/usr/db/database.db"
+config = {
+        'user': 'admin',
+        'password': 'test',
+        'host': 'db',
+        'database': 'database'
+    }
 
 
 def check_db():
-    if os.path.exists(pathToDb):
-        if os.path.isfile(pathToDb):
-            return
-    create_table()
+    stmt = "SHOW TABLES LIKE 'IDENTIFICATION'"
+    conn = mysql.connector.connect(**config)
+    conn.execute(stmt)
+    result = conn.fetchone()
+    if result:
+        return
+    else:
+        create_table()
 
 
 def create_table():
-    conn = sqlite3.connect(pathToDb)
-
+    conn = mysql.connector.connect(**config)
     c = conn.cursor()
     c.execute('''CREATE TABLE IDENTIFICATION
             ( Id TEXT PRIMARY KEY NOT NULL, User TEXT NOT NULL)''')
@@ -23,12 +30,12 @@ def insert_into_db(id, user):
     check_db()
     conn = None
     try:
-        conn = sqlite3.connect(pathToDb)
+        conn = mysql.connector.connect(**config)
         cursor = conn.cursor()
         query = "INSERT INTO IDENTIFICATION (Id, User) VALUES('" + str(id) + "', '" + str(user) + "')"
         cursor.execute(query)
         conn.commit()
-    except sqlite3.Error as error:
+    except mysql.Error as error:
         print(error)
 
     finally:
@@ -41,7 +48,7 @@ def get_all_from_db():
     conn = None
     values = []
     try:
-        conn = sqlite3.connect(pathToDb)
+        conn = mysql.connector.connect(**config)
         cursor = conn.cursor()
         query = "SELECT * FROM IDENTIFICATION;"
         cursor.execute(query)
