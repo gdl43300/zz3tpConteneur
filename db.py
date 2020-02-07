@@ -1,4 +1,4 @@
-import mysql
+import pymysql
 
 config = {
         'user': 'admin',
@@ -9,33 +9,50 @@ config = {
 
 
 def check_db():
-    stmt = "SHOW TABLES LIKE 'IDENTIFICATION'"
-    conn = mysql.connector.connect(**config)
-    conn.execute(stmt)
-    result = conn.fetchone()
-    if result:
-        return
-    else:
-        create_table()
+    conn = None
+    try:
+        conn = pymysql.connect(**config)
+        cursor = conn.cursor()
+        stmt = "SHOW TABLES LIKE 'IDENTIFICATION'"
+        cursor.execute(stmt)
+        result = cursor.fetchone()
+        if result:
+            return
+        else:
+            create_table()
+    except pymysql.Error as error:
+        print(error)
+
+    finally:
+        if conn:
+            conn.close()
 
 
 def create_table():
-    conn = mysql.connector.connect(**config)
-    c = conn.cursor()
-    c.execute('''CREATE TABLE IDENTIFICATION
-            ( Id TEXT PRIMARY KEY NOT NULL, User TEXT NOT NULL)''')
+    conn = None
+    try:
+        conn = pymysql.connect(**config)
+        c = conn.cursor()
+        c.execute('''CREATE TABLE IDENTIFICATION
+                ( Id VARCHAR(200) PRIMARY KEY NOT NULL, User VARCHAR(200) NOT NULL)''')
+    except pymysql.Error as error:
+        print(error)
+
+    finally:
+        if conn:
+            conn.close()
 
 
 def insert_into_db(id, user):
     check_db()
     conn = None
     try:
-        conn = mysql.connector.connect(**config)
+        conn = pymysql.connect(**config)
         cursor = conn.cursor()
         query = "INSERT INTO IDENTIFICATION (Id, User) VALUES('" + str(id) + "', '" + str(user) + "')"
         cursor.execute(query)
         conn.commit()
-    except mysql.Error as error:
+    except pymysql.Error as error:
         print(error)
 
     finally:
@@ -48,7 +65,7 @@ def get_all_from_db():
     conn = None
     values = []
     try:
-        conn = mysql.connector.connect(**config)
+        conn = pymysql.connect(**config)
         cursor = conn.cursor()
         query = "SELECT * FROM IDENTIFICATION;"
         cursor.execute(query)
@@ -56,7 +73,7 @@ def get_all_from_db():
         for row in rows:
             values.append(row)
         return values
-    except sqlite3.Error as error:
+    except pymysql.Error as error:
         print(error)
 
     finally:
