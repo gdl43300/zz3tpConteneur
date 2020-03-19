@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  labels:
+    app: flask-test
+spec:
+  selector:
+    matchLabels:
+      app: flask-test
+      tier: frontend
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: flask-test
+        tier: frontend
+    spec:
+      containers:
+      - name: flask-test
+        image: gdl43300/zz3tpconteneur:latest
+        ports:
+        - containerPort: 8080

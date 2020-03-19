@@ -3,9 +3,16 @@ import pymysql
 config = {
         'user': 'admin',
         'password': 'test',
-        'host': 'db',
+        'host': 'mysql',
         'database': 'database'
     }
+
+configWrite = {
+    'user': 'admin',
+    'password': 'test',
+    'host': 'mysql-0.mysql',
+    'database': 'database'
+}
 
 
 def check_db():
@@ -31,7 +38,7 @@ def check_db():
 def create_table():
     conn = None
     try:
-        conn = pymysql.connect(**config)
+        conn = pymysql.connect(**configWrite)
         c = conn.cursor()
         c.execute('''CREATE TABLE IDENTIFICATION
                 ( Id VARCHAR(200) PRIMARY KEY NOT NULL, User VARCHAR(200) NOT NULL)''')
@@ -47,7 +54,7 @@ def insert_into_db(id, user):
     check_db()
     conn = None
     try:
-        conn = pymysql.connect(**config)
+        conn = pymysql.connect(**configWrite)
         cursor = conn.cursor()
         query = "INSERT INTO IDENTIFICATION (Id, User) VALUES('" + str(id) + "', '" + str(user) + "')"
         cursor.execute(query)
